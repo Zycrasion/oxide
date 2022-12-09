@@ -7,15 +7,11 @@ use crate::utilities::utils::interface::centre_with;
 use client::cli::Terminal;
 use file::file_handler::Document;
 use termion::event::Key;
-use termion::input::{Keys, TermRead};
+use termion::input::TermRead;
 use termion::raw::IntoRawMode;
-use termion::style::Reset;
-
 use std::io::{stdin, stdout, Write};
 use std::os::unix::process::CommandExt;
 use std::process::{Command, exit};
-use std::thread;
-use std::time::Duration;
 use termion::color;
 
 struct Oxide
@@ -69,7 +65,7 @@ impl Oxide
         for index in 3..self.interface.height {
             cli::goto(1,y);
             y += 1;
-            let mut content = String::new();
+            let content: String;
             {
                 let line = self.doc.content.get(index + self.line_offset);
                 match line 
@@ -121,10 +117,6 @@ impl Oxide
             stdout.flush().unwrap();
         }
     }
-}
-
-fn wait(millis: u64) {
-    thread::sleep(Duration::from_millis(millis));
 }
 
 fn main() {
